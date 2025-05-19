@@ -1,0 +1,22 @@
+# Mac system files
+.DS_Store
+
+# Node dependencies
+node_modules/
+
+# Cypress output (optional, nên ignore nếu không cần debug log hoặc CI sẽ tạo lại)
+cypress/videos/
+cypress/screenshots/
+
+# Firebase auth/debug files
+.firebase/
+
+# Local emulators state
+firestore-debug.log
+firebase-debug.log
+
+
+# Env files
+.env
+.env.local
+.env.*.local
