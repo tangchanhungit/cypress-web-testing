@@ -1,8 +1,8 @@
 const SEARCH_INPUT_LOCATOR = `//*[@id='search']`
 const BTN_SEARCH_LOCATOR  = `//button[.//span[text()='Tìm kiếm']]`
-const JOB_CARD_LIST_LOCATOR = `//ul[contains(@class,'mt-4')]`
-const JOB_TITLE_LOCATOR = `//h3[@class='line-clamp-1']`
-const SKILL_TAG_LOCATOR = `//div[contains(@class, "line-clamp-1")]//span`
+const JOB_CARD_LOCATOR = `//li[contains(@class,'mb-4 last:mb-0')]`
+const FREE_JOB_LOCATOR = `//li[contains(@class,'free-job')]`
+const LOCATION_LOCATOR = `//div[contains(@class, 'relative flex cursor')]`
 
 export const SearchPage = {
     navigate() {
@@ -15,32 +15,28 @@ export const SearchPage = {
             .and('not.be.disabled');
     },
 
-    get searchButton() {
-        return cy.xpath(BTN_SEARCH_LOCATOR).click();
-    },
-    
-    get jobCardList() {
-        return cy.xpath(JOB_CARD_LIST_LOCATOR).should('be.visible');
-    },
-
-    get jobCards() {
-        return this.jobCardList.find('li');
-    },
-
-    get jobTitle() {
-        return cy.xpath(JOB_TITLE_LOCATOR);
-    },
-
-    get skillTags() {
-        return cy.xpath(SKILL_TAG_LOCATOR);
-    },
-
     enterKeyword(keyword) {
         this.searchInput.clear().type(keyword, { force: true });
     },
 
-    search(keyword) {
-        this.searchInput.type(keyword);
+    get searchButton() {
+        return cy.xpath(BTN_SEARCH_LOCATOR).should('be.visible');
+    },
+
+    clickSearchButton() {
+        this.searchButton.click();
+    },
+
+    get jobCards() {
+        return cy.xpath(JOB_CARD_LOCATOR);
+    },
+    
+    get freeJob(){
+        return cy.xpath(FREE_JOB_LOCATOR);
+    },
+
+    get locationField(){
+        return cy.xpath(LOCATION_LOCATOR).click();
     },
 
     loadAllResults() {
@@ -51,13 +47,15 @@ export const SearchPage = {
                 cy.wrap($btn)
                     .scrollIntoView()
                     .click({ force: true })
-                    .wait(1500)
+                    .wait(1000)
                     .then(() => clickIfExists());
-            } else {
-                cy.log('✅ Không còn nút Xem thêm.');
             }
-        };
-
+        }
         return cy.then(() => clickIfExists());
+    },
+
+    selectLocation(location) {
+        cy.xpath(LOCATION_LOCATOR).click()
+        cy.contains("li", location).click();
     }
 }
