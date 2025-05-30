@@ -24,7 +24,7 @@ Feature: Basic Search Functionality
     Then the search result should be "<expected>"
     Then I should see at least 1 result
     Then I load all available results by clicking "Xem thêm" until it disappears
-    And each result should contain "<expected>"
+    Then Each result should contain "<expected>"
     
     Examples:
       | input         | expected         |
@@ -36,7 +36,7 @@ Feature: Basic Search Functionality
     When I enter "<company>" in search bar
     And I press the search button
     Then I should see at least 1 result
-    And each result should contain "<company>"
+    Then each result should contain "<company>"
 
   Examples:
     | company       |
@@ -54,7 +54,7 @@ Feature: Basic Search Functionality
     When I enter "<input>" in search bar
     And I press the search button
     Then I should see at least 1 result
-    And each result should contain "<expected>"
+    Then Each result should contain "<expected>"
 
     Examples:
       | input         | expected         |
@@ -66,7 +66,7 @@ Feature: Basic Search Functionality
     When I enter "lập trình" in search bar
     And I press the search button
     Then I should see at least 1 result
-    And each result should contain "lập trình"
+    Then Each result should contain "lập trình"
 
   Scenario Outline: Search with an unusually long keyword
     When I enter "<input>" in search bar
