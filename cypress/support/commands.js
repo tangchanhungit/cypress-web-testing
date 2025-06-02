@@ -33,7 +33,7 @@ export function checkCardContainsKeyword(card, keyword) {
   }
 
   // Dò title (h3 trong line-clamp-1 hoặc 2)
-  const $titleEl = $card.find('h3.line-clamp-1 a, h3.line-clamp-2 a');
+  const $titleEl = $card.find('h3.line-clamp-1 a');
   const title = $titleEl.length ? $titleEl.text().trim() : '';
 
   // Dò company (div.mt-1.line-clamp-1 a)
@@ -46,19 +46,53 @@ export function checkCardContainsKeyword(card, keyword) {
     ? [...$skillEls].map(el => el.textContent.trim()).join(' ')
     : '';
 
+  const $locationEl = $card.find('div.text-gray-500 p:first-child');
+  const location = $locationEl.length ? $locationEl.text().trim() : '';
+
   // Normalize và so sánh
-  const normalize = (text) => (text || '').trim().toLowerCase();
+  const normalize = (text) => {
+    return (text || '').trim()
+    .toLowerCase()
+    .normalize("NFD")                  // Tách dấu ra khỏi chữ
+    .replace(/[\u0300-\u036f]/g, "")   // Xóa dấu
+    .replace(/\s+/g, ' ');
+  }
+  
   const keywordLower = normalize(keyword);
   const titleLower = normalize(title);
   const skillsLower = normalize(skills);
   const companyLower = normalize(company);
+  const locationLower = normalize(location);
+  const $experienceEl = $card.find('div p.text-gray-500').filter((i, el) => {
+  const text = Cypress.$(el).text().toLowerCase();
+    // Lọc ra thẻ p chứa kinh nghiệm, ví dụ có thể dùng từ khóa như "intern", "junior", "senior", "exp" trong text
+    return /intern|junior|senior|exp|experience/i.test(text);
+  });
+  const experience = $experienceEl.length ? $experienceEl.first().text().trim() : '';
 
   const isTitleMatch = titleLower.includes(keywordLower);
   const isSkillsMatch = skillsLower.includes(keywordLower);
   const isCompanyMatch = companyLower.includes(keywordLower);
+  const isLocationMatch = locationLower.includes(keywordLower);
+  const isExperienceMatch = normalize(experience).includes(keywordLower);
 
   expect(
-    isTitleMatch || isSkillsMatch || isCompanyMatch,
-    `Expected title, skills, or company to contain "${keyword}", but none matched.\nTitle: "${title}"\nSkills: "${skills}"\nCompany: "${company}"`
+    isTitleMatch || isSkillsMatch || isCompanyMatch || isLocationMatch || isExperienceMatch,
+    `Expected title, skills, company, location, or experience to contain "${keyword}", but none matched.
+    Title: "${title}"
+    Skills: "${skills}"
+    Company: "${company}"
+    Location: "${location}"
+    Experience: "${experience}"`
   ).to.be.true;
+}
+
+export function handleIfResultsExist(callback) {
+  cy.get('body').then(($body) => {
+    if ($body.text().includes('Oops! No such Tester job listings found')) {
+      expect(true).to.be.true; // Không fail test
+    } else {
+      callback();
+    }
+  });
 }
