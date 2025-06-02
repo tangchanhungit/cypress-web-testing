@@ -26,8 +26,8 @@ When('I select {string} in the work type filter', (workType) => {
   SearchPage.selectFilterItem('Work Type', workType);
 });
 
-Then('I press the search button again', () =>{
-  SearchPage.clickSearchButtonInPage();
+Then('I press the {string} search button again', (text) =>{
+  SearchPage.clickSearchButtonInPage(text);
 });
 
 Then('all results should be in {string}', (location) => {

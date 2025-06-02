@@ -21,8 +21,8 @@ When('I enter {string} in search bar', (keyword) => {
   }
 });
 
-When('I press the search button', () => {
-    SearchPage.clickSearchButton();
+When('I press the {string} search button', (text) => {
+    SearchPage.clickSearchButtonInPage(text);
 });
 
 When('I load all available results by clicking "Xem thêm" until it disappears', () => {
