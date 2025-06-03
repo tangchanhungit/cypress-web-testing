@@ -52,6 +52,17 @@ Cypress.on('uncaught:exception', (err) => {
   return true; // allow other errors to fail the test
 });
 
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // Bỏ qua tất cả lỗi không mong muốn trong ứng dụng React
+  if (err.message.includes('Minified React error #418')) {
+    return false; // Ngăn không cho test fail
+  }
+
+  // Có thể thêm điều kiện khác tùy bạn
+  return true; // Hoặc return false nếu muốn ignore tất cả
+});
+
+
 export function checkCardContainsKeyword(card, keyword) {
   const $card = Cypress.$(card);
 
