@@ -1,8 +1,9 @@
 const SEARCH_INPUT_LOCATOR = `//*[@id='search']`
 const BTN_SEARCH_LOCATOR  = `//button[.//span[text()='Tìm kiếm']]`
+const BTN_SEARCH_IN_PAGE_LOCATOR = `//button[.//span[text()='Search']]`
+const JOB_LIST = `//ul[contains(@class,'mt-4')]`
 const JOB_CARD_LOCATOR = `//li[contains(@class,'mb-4 last:mb-0')]`
-const FREE_JOB_LOCATOR = `//li[contains(@class,'free-job')]`
-const LOCATION_LOCATOR = `//div[contains(@class, 'relative flex cursor')]`
+const BTN_LOCATION_LOCATOR = `//button[contains(@class,'flex w-full items-center gap-2')]`
 
 export const SearchPage = {
     navigate() {
@@ -23,20 +24,29 @@ export const SearchPage = {
         return cy.xpath(BTN_SEARCH_LOCATOR).should('be.visible');
     },
 
+    get searchInPageBtn(){
+        return cy.xpath(BTN_SEARCH_IN_PAGE_LOCATOR).should('be.visible');
+    },
+
     clickSearchButton() {
         this.searchButton.click();
+        cy.wait(300);
+    },
+
+    clickSearchButtonInPage(){
+        this.searchInPageBtn.click();
+    },
+
+    get jobList(){
+        return cy.xpath(JOB_LIST);
     },
 
     get jobCards() {
         return cy.xpath(JOB_CARD_LOCATOR);
     },
     
-    get freeJob(){
-        return cy.xpath(FREE_JOB_LOCATOR);
-    },
-
-    get locationField(){
-        return cy.xpath(LOCATION_LOCATOR).click();
+    get btnLocation(){
+        return cy.xpath(BTN_LOCATION_LOCATOR);
     },
 
     loadAllResults() {
@@ -55,7 +65,36 @@ export const SearchPage = {
     },
 
     selectLocation(location) {
-        cy.xpath(LOCATION_LOCATOR).click()
-        cy.contains("li", location).click();
+        // Click nút để mở dropdown
+        this.btnLocation.should('exist').click({ force: true });
+
+        cy.wait(1000);
+
+        // Chờ dropdown thực sự hiển thị
+        cy.xpath("//div[contains(@class, 'absolute') and contains(@class, 'top-10')]")
+        .should('be.visible');
+
+        // Click vào span theo location
+        cy.xpath(`//ul/li//span[normalize-space()="${location}"]`)
+        .should('exist')
+        .should('be.visible')
+        .click({ force: true });
+    },
+
+    selectFilterItem(filterName, itemText) {
+        // 1. Click button mở dropdown
+        cy.xpath(`//button[contains(@class,'border-[#DD3F24]')]//span[normalize-space()="${filterName}"]`)
+        .should('be.visible')
+        .click();
+
+        // 2. Chờ dropdown ul cùng cấp div.relative mở (không còn hidden)
+        cy.xpath(`//button[contains(@class,'border-[#DD3F24]')]//span[normalize-space()="${filterName}"]/ancestor::div[contains(@class,'relative')]/ul[not(contains(@class,'hidden'))]`)
+        .should('exist')
+        .should('be.visible');
+
+        // 3. Click item trong dropdown (span chứa text itemText)
+        cy.xpath(`//button[contains(@class,'border-[#DD3F24]')]//span[normalize-space()="${filterName}"]/ancestor::div[contains(@class,'relative')]/ul/li//span[normalize-space()="${itemText}"]`)
+        .should('be.visible')
+        .click({ force: true });
     }
 }

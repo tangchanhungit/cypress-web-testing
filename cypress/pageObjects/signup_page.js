@@ -39,7 +39,7 @@ export const SignUpPage = {
     },
 
     get btnNhaTuyenDung() {
-        return cy.xpath(BTN_NHA_TUYEN_DUNG)
+        return cy.xpath(BTN_NHA_TUYEN_DUNG).click();
     },
 
     get btnSignIn() {

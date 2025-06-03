@@ -8,7 +8,7 @@ module.exports = defineConfig({
     chromeWebSecurity: false,
     baseUrl: "https://topdev.vn",
     specPattern: "cypress/e2e/features/**/*.feature",
-    stepDefinitions: "cypress/e2e/support/step_definitions/*.js",
+    stepDefinitions: "cypress/e2e/support/step_definitions/*.cy.js",
     supportFile: "cypress/support/commands.js",
     setupNodeEvents: async (on, config) => {
       await addCucumberPreprocessorPlugin(on, config);

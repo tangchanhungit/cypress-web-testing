@@ -4,8 +4,10 @@ Feature: User Sign Up
   I want to be able to sign up for a new account
   So that I can access the application
 
-  Scenario: Successful Sign Up with valid details
+  Background:
     Given I am on the sign up page
+
+  Scenario: Successful Sign Up with valid details
     When I enter the following details:
     And I agree to the terms and conditions
     # And I click the "Đăng ký" button
@@ -13,7 +15,6 @@ Feature: User Sign Up
     # And I should see a welcome message
 
   Scenario: User does not select the hiring option
-    Given I am on the sign up page
     When I enter the following details:
     And I click the "Công ty bạn đang có nhu cầu tuyển dụng không?"
     And I agree to the terms and conditions
@@ -21,13 +22,10 @@ Feature: User Sign Up
     # Then I should be redirected to the dashboard
 
   Scenario: Sign Up with password mismatch error
-    Given I am on the sign up page
     When I fill valid sign up form except confirm password is "test1234"
     And I agree to the terms and conditions
     And I click the "Đăng ký" button
     Then I should see an error message "Mật khẩu xác nhận không trùng khớp"
-
-
 
 #   And I agree to the terms and conditions
 #   And I click the "Đăng ký" button

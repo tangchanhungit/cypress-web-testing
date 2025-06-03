@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Nguyen Van A",
+    "position": "TESTER",
+    "phone": "0337704139",
+    "gender": "male",
+    "dateOfBirth": "02-04-2001",
+    "city": "Thành phố Hồ Chí Minh",
+    "status": "Đang tìm việc",
+    "salary": "Dưới $300",
+    "content": "test data",
+    "skill": "Đại Học Tôn Đức Thắng"
+  }
+]
