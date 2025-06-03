@@ -64,7 +64,7 @@ When('I agree to the terms and conditions', () => {
 
 When('I click the {string} button', (buttonText) => {
     if (buttonText === "Đăng ký") {
-        SignUpPage.btnSignUpField;
+        SignUpPage.btnSignUpField.wait(5000).click();
     }
 });
 Then('I should see an error message {string}', (errorMessage) => {

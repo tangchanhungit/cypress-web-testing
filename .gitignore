@@ -8,14 +8,6 @@ node_modules/
 cypress/videos/
 cypress/screenshots/
 
-# Firebase auth/debug files
-.firebase/
-
-# Local emulators state
-firestore-debug.log
-firebase-debug.log
-
-
 # Env files
 .env
 .env.local

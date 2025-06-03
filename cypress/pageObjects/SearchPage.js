@@ -57,12 +57,8 @@ export const SearchPage = {
         return cy.xpath(JOB_CARD_LOCATOR);
     },
     
-    get freeJob(){
-        return cy.xpath(FREE_JOB_LOCATOR);
-    },
-
-    get locationField(){
-        return cy.xpath(LOCATION_LOCATOR).click();
+    get btnLocation(){
+        return cy.xpath(BTN_LOCATION_LOCATOR);
     },
 
     loadAllResults() {
@@ -81,6 +77,7 @@ export const SearchPage = {
     },
 
     selectLocation(location) {
+
         cy.xpath(LOCATION_LOCATOR).click()
         cy.contains('label', location)
         .find('input[type="checkbox"]')
@@ -104,8 +101,5 @@ export const SearchPage = {
             }
         }
         });
-
     }
-
-    
 }

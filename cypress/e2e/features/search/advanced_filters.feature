@@ -38,6 +38,7 @@ Feature: Advanced Search Functionality
 # | Ho Chi Minh |
 # | Ha Noi      |
 # | Da Nang     |
+=======
 
 # Scenario: Filter by experience
 #   When I enter "SQL" in search bar
@@ -70,6 +71,7 @@ Feature: Advanced Search Functionality
 #   And I press the search button again
 #   Then I load all available results by clicking "Xem thêm" until it disappears
 #   Then I should see at least 1 result
+
 
 # Scenario: Filter by location and experience
 #   When I enter "SQL" in search bar

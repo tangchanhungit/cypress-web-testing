@@ -1,5 +1,32 @@
+Cypress.Commands.add('restoreLoginSession', () => {
+  cy.fixture('auth-cookies.json').then((cookies) => {
+    cookies.forEach((cookie) => {
+      cy.setCookie(cookie.name, cookie.value, {
+        domain: cookie.domain,
+        path: cookie.path,
+        secure: cookie.secure,
+        httpOnly: cookie.httpOnly
+      });
+    });
+  });
+});
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // Bỏ qua lỗi liên quan tới service worker của Firebase Messaging
+  if (
+    err.message.includes('Failed to register a ServiceWorker') ||
+    err.message.includes('firebase-messaging-sw.js') ||
+    err.message.includes('messaging/failed-service-worker-registration') || 
+    err.message.includes('ResizeObserver loop completed with undelivered notifications')
+  ) {
+    return false; // Không fail test
+  }
+  // Để các lỗi khác fail test bình thường
+  return true;
+});
+
 beforeEach(() => {
-  cy.clearCookies(); // Xoá cookies trước mỗi test case
+  cy.restoreLoginSession(); // set lại login cookie
 });
 
 require('cypress-xpath')

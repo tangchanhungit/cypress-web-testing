@@ -1,0 +1,10 @@
+[
+    {
+        "name" : "TDSID",
+        "value" : "eyJpdiI6InhDUW5ZS08wb1U2ZzFXM0Z5SGxrbmc9PSIsInZhbHVlIjoiTTUyTkc0OUdobUV2UkJPQ2JIL2lyMEhpQ2VBU0JtNEF6N1I0L2xGU3YzQ2U1Qm5td3RzWlpGT1hrTFJLbmtyVXRWQnh2RCtXYkNFR3BQV1JGSnFqdDdBQVdYbFZaRUZiUVBNV3hZSWhURzRqSWlHUTZLR0haSmJWM3h5VUE1T1UiLCJtYWMiOiI3NjAxNzA4M2ZkMDM5YTRiNTQyZjdjZGY2MjdjMzZmNGQzODg1YTI2YTRiOGYzOGJhNmIwZWEyODIwY2E4ZDAwIiwidGFnIjoiIn0%3D%3D",
+        "domain" : ".topdev.vn",
+        "path" : "/",
+        "secure": true,
+        "httpOnly": true
+    }
+]
