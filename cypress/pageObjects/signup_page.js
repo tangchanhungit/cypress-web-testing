@@ -11,15 +11,9 @@ const TXT_TAX_LOCATOR = `//*[@id="tax_number"]`;
 const TXT_COMPANY_NAME_LOCATOR = `//*[@id="business_name"]`;  
 const CHECKBOX_NO = `//*[@id="customRadioInline2"]`;  
 const CHECKBOX_LOCATOR = `//*[@id="checkbox-1"]`; 
-
 const BTN_SIGNUP_LOCATOR = `//button[@type="submit" and contains(@class, "btn-register")]`; 
-
 const BTN_NHA_TUYEN_DUNG = `//li[@class="tab-item"]//a[@tab-root="tab-employer"]`;
-
 const ERROR_PASSWORD_XPATH = `//p[contains(@class, "invalid-feedback") and contains(@class, "error-confirm-password") and contains(text(), "Mật khẩu xác nhận không trùng khớp")]`;
-
-
-
 
 export const SignUpPage = {
     navigate() {

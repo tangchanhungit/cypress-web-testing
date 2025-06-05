@@ -1,4 +1,4 @@
-import { SearchPage } from "../../pageObjects/searchpage";
+import { SearchPage } from "../../pageObjects/SearchPage";
 import {
     Given,
     When,
@@ -69,9 +69,11 @@ Then('I should see at least {int} result', (minCount) => {
 
 
 Then('Each result should contain {string}', (keyword) => {
-  SearchPage.jobCards.then(($cards) => {
-    Cypress._.each($cards, (card) => {
-        checkCardContainsKeyword(card, keyword);  
+  handleIfResultsExist( () => {
+    SearchPage.jobCards.then(($cards) => {
+      Cypress._.each($cards, (card) => {
+          checkCardContainsKeyword(card, keyword);  
+      });
     });
-  });
+  })
 });

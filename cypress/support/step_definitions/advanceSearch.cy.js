@@ -1,4 +1,4 @@
-import { SearchPage } from "../../pageObjects/searchpage";
+import { SearchPage } from "../../pageObjects/SearchPage";
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import { checkCardContainsKeyword, handleIfResultsExist } from "../commands";
 

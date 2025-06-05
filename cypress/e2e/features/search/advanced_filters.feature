@@ -38,7 +38,7 @@ Feature: Advanced Search Functionality
 # | Ho Chi Minh |
 # | Ha Noi      |
 # | Da Nang     |
-=======
+
 
 # Scenario: Filter by experience
 #   When I enter "SQL" in search bar

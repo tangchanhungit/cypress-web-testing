@@ -10,7 +10,7 @@ Feature: Basic Search Functionality
 
   Scenario Outline: Search with invalid keywords should show validation error
     When I enter "<input>" in search bar
-    And I press the search button
+    And I press the "Tìm kiếm" search button
     Then the search result should be "validation error"
 
     Examples:
@@ -20,7 +20,7 @@ Feature: Basic Search Functionality
  
   Scenario Outline: Search with edge cases
     When I enter "<input>" in search bar
-    And I press the search button
+    And I press the "Tìm kiếm" search button
     Then the search result should be "<expected>"
     Then I should see at least 1 result
     Then I load all available results by clicking "Xem thêm" until it disappears
@@ -34,7 +34,7 @@ Feature: Basic Search Functionality
 
   Scenario Outline: Search jobs by company name
     When I enter "<company>" in search bar
-    And I press the search button
+    And I press the "Tìm kiếm" search button
     Then I should see at least 1 result
     Then each result should contain "<company>"
 
@@ -47,12 +47,12 @@ Feature: Basic Search Functionality
 
       
   Scenario: Search with nothing enter 
-    And I press the search button
+    And I press the "Tìm kiếm" search button
     Then I should see at least 1 result
 
   Scenario Outline: Search should be case-insensitive
     When I enter "<input>" in search bar
-    And I press the search button
+    And I press the "Tìm kiếm" search button
     Then I should see at least 1 result
     Then Each result should contain "<expected>"
 
@@ -64,13 +64,15 @@ Feature: Basic Search Functionality
 
   Scenario: Search with Vietnamese accented characters
     When I enter "lập trình" in search bar
-    And I press the search button
+    And I press the "Tìm kiếm" search button
+
     Then I should see at least 1 result
     Then Each result should contain "lập trình"
 
   Scenario Outline: Search with an unusually long keyword
     When I enter "<input>" in search bar
-    And I press the search button
+    And I press the "Tìm kiếm" search button
+
     Then the search result should be "validation error"
 
     Examples:

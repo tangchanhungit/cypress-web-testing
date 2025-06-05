@@ -1,7 +1,6 @@
 const SEARCH_INPUT_LOCATOR = `//*[@id='search']`
 // const BTN_SEARCH_LOCATOR  = `//button[.//span[text()='Tìm kiếm']]`
 const JOB_CARD_LOCATOR = `//li[contains(@class,'mb-4 last:mb-0')]`
-const FREE_JOB_LOCATOR = `//li[contains(@class,'free-job')]`
 const LOCATION_LOCATOR = `//span[.='Location']`
 var  LOCATION_FILTER = (text) => `//span[.='${text}']`
 
@@ -77,7 +76,6 @@ export const SearchPage = {
     },
 
     selectLocation(location) {
-
         cy.xpath(LOCATION_LOCATOR).click()
         cy.contains('label', location)
         .find('input[type="checkbox"]')

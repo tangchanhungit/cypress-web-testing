@@ -9,47 +9,42 @@ Then('I click create CV button', () =>{
     CVPage.clickCVBtnCreate();
 })
 
-When('I fill in my full name as {string}', (name) => {
+When('I create CV with names {string}', (name) => {
     CVPage.fillNameInfo(name);
 })
 
 Then('I click start create button', () => {
     CVPage.clickStartCreate();
+    cy.wait(1000)
 })
 
-When('I fill all my personal info from data set', () => {
-    cy.fixture('valid_data.json').then((cvs) =>{
+When('I fill Personal information section', () => {
+    cy.fixture('data.json').then((cvs) =>{
         cvs.forEach((cv) => {    
-            CVPage.fillBasicInfo(cv.name, cv.position, cv.phone, cv.dateOfBirth, cv.city);
+            CVPage.fillBasicInfo(cv.name, cv.position, cv.gmail, cv.phone, cv.dateOfBirth, cv.city);
             CVPage.selectGender(cv.gender);
             CVPage.fillAdditionalInfo(cv.address, cv.linkedin, cv.github);
-            CVPage.selectStatusWorks(cv.status);
-            CVPage.selectSalary(cv.salary);
-
-            // Các bước tiếp theo, ví dụ submit form, verify, reset form, ...
-            // CVPage.submitForm();
-
-            // // Nếu cần làm lại cho data kế tiếp, reset hoặc reload page
-            // cy.reload();
+            CVPage.fillFindJobSection(cv.status,cv.salary);
+            CVPage.fillIntroduce(cv.content);
         });
     })
 })
 
-When('I fill requires info from data set', () =>{
-    cy.fixture('require_data.json').then((cvs) =>{
+When('I fill Programming skills section', () =>{
+    cy.fixture('data.json').then((cvs) =>{
         cvs.forEach((cv) => {    
-            CVPage.fillBasicInfo(cv.name, cv.position, cv.phone, cv.dateOfBirth, cv.city);
-            CVPage.selectGender(cv.gender);
-            CVPage.selectStatusWorks(cv.status);
-            CVPage.selectSalary(cv.salary);
-            CVPage.fillIntroduce(cv.content);
-            CVPage.selectSkills(cv.skill);
-
-            // Các bước tiếp theo, ví dụ submit form, verify, reset form, ...
-            // CVPage.submitForm();
-
-            // // Nếu cần làm lại cho data kế tiếp, reset hoặc reload page
-            // cy.reload();
+            CVPage.fillProgramSkill(cv.main_skills, cv.group_skills)
         });
     })
+})
+When('I fill Education section', () =>{
+    cy.fixture('data.json').then((cvs) =>{
+        cvs.forEach((cv) => {    
+            CVPage.fillEducation(cv.school, cv.major);
+        });
+    })
+})
+
+Then('I click save CV', () => {
+    CVPage.clickSaveCV();
 })

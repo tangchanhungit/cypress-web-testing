@@ -1,18 +1,11 @@
-const CV_CREATE_BUTTON = `//div[h2[normalize-space()='Tạo CV']]//a[normalize-space()='Khám phá ngay']`
+const CV_CREATE_BUTTON = `//a[contains(@href, '/users/my-cv') and contains(., 'Khám phá ngay')]`
 const NAME_FIELD = `//input[contains(@class,'ant-input')]`
-const CREATE_BUTTON = `//button[@xl='true' and @type='submit' and span[text()='Bắt đầu tạo']]`
-const INPUT_NAME_LOCATOR = `//input[@name='personal.0.name']`
-const INPUT_POSITION_LOCATOR = `//input[@name='personal.0.profession']`
-const INPUT_PHONE_LOCATOR = `//input[@name='personal.0.phone']`
-const INPUT_DATE_OF_BIRTH_LOCATOR = `//input[@name='personal.0.dateofbirth']`
-const INPUT_CITY_LOCATOR = `//div[contains(@class, 'ant-select') and @name='personal.0.provinces_id']//input[contains(@class, 'ant-select-selection-search-input')]`
-const INPUT_ADDRESS_LOCATOR = `//input[@name='personal.0.address']`
-const INPUT_LINKEDIN_LOCATOR = `//input[@name='personal.0.linkedin']`
-const INPUT_GITHUB_LOCATOR = `//input[@name='personal.0.github']`
-const STATUS_WORKS_LOCATOR = `//div[contains(@class, 'ant-select') and @name='status_works']//input[contains(@class, 'ant-select-selection-search-input')]`
-const SALARY_LOCATOR = `//div[contains(@class, 'ant-select') and @name='salary_range']//input[contains(@class, 'ant-select-selection-search-input')]`
-const INTRODUCE_LOCATOR = `//label[text()='Giới thiệu bản thân']/ancestor::div[contains(@class,'ant-form-item')]//iframe[contains(@class, 'tox-edit-area__iframe')]`;
-const SKILL_LOCATOR = `//div[contains(@class, 'ant-select-selector')][.//span[text()='Nhóm kỹ năng chính']]//input[@type='search']`
+const BUTTON_LOCATOR = (text) => `//button[.//span[text()='${text}']]`
+
+const INPUT_FIELD = (placeholder) => `//input[@placeholder='${placeholder}']`
+const DROPDOWN_FIELD = (placeholder) => `//span[contains(text(),"${placeholder}")]/preceding-sibling::span//input[@class="ant-select-selection-search-input"]`
+const GENDER_LOCATION = (gender) => `//input[@value='${gender}']`
+
 export const CVPage = {
     navigate() {
         cy.visit('/tao-cv-online')
@@ -28,96 +21,93 @@ export const CVPage = {
     },
 
     clickStartCreate(){
-        cy.xpath(CREATE_BUTTON).click();
+        cy.xpath(BUTTON_LOCATOR('Bắt đầu tạo')).click();
     },
 
-    fillBasicInfo(name, position, phone, dateofbirth, city){
-        cy.xpath(INPUT_NAME_LOCATOR)
-            .should('exist')
-            .clear()
-            .type(name);
-        cy.xpath(INPUT_POSITION_LOCATOR)
-            .should('exist')
-            .clear()
-            .type(position);
-        cy.xpath(INPUT_PHONE_LOCATOR)
-            .should('exist')
-            .clear()
-            .type(phone);
+    fillInputFields(fields) {
+        fields.forEach(({ locator, value, force = false }) => {
+            cy.xpath(locator)
+                .should('exist')
+                .clear({ force })
+                .type(`${value}`, { force });
+        });
+    },
 
-        cy.xpath(INPUT_DATE_OF_BIRTH_LOCATOR)
-            .should('exist')
-            .clear({ force: true })
-            .type(`${dateofbirth}{enter}`, { force: true });
-        cy.xpath(INPUT_CITY_LOCATOR)
-            .should('exist')
-            .clear({ force: true })
-            .type(`${city}{enter}`, { force: true });
+
+    fillBasicInfo(name, position, email, phone, dateofbirth, city){
+        this.fillInputFields([
+            { locator: INPUT_FIELD('Vui lòng nhập họ và tên'), value: name },
+            { locator: INPUT_FIELD('Vui lòng chọn vị trí ứng tuyển'), value: position },
+            { locator: INPUT_FIELD('@gmail.com'), value: email },
+            { locator: INPUT_FIELD('Vui lòng nhập số điện thoại'), value: phone },
+            { locator: INPUT_FIELD('DD-MM-YYYY'), value: `${dateofbirth}{enter}`, force: true },
+        ]);
+
+        this.selectDropdownValue("", city);
     },
 
     fillAdditionalInfo(address, linkedin, github){
-        cy.xpath(INPUT_ADDRESS_LOCATOR)
-            .should('exist')
-            .clear()
-            .type(address);
-        
-        cy.xpath(INPUT_LINKEDIN_LOCATOR)
-            .should('exist')
-            .clear()
-            .type(linkedin);
-        
-        cy.xpath(INPUT_GITHUB_LOCATOR)
-            .should('exist')
-            .clear()
-            .type(github);
+        this.fillInputFields([
+            { locator: INPUT_FIELD('Đường, Phường, Quận'), value: address },
+            { locator: INPUT_FIELD('https://lk.id/username'), value: linkedin },
+            { locator: INPUT_FIELD('https://github.com/username'), value: github },
+        ]);
     },
 
-    selectGender(value){
-        cy.xpath(`//input[@name='personal.0.gender' and @value='${value}']`).should('exist')
+    selectGender(gender){
+        cy.xpath(GENDER_LOCATION(gender))
+            .should('exist')
             .click({force:true})
     },
 
-    selectStatusWorks(value) {
-        cy.xpath(STATUS_WORKS_LOCATOR).click({force:true});
+    selectDropdownValue(placeholderText, value) {
+        let input_field;
 
-        cy.get('.ant-select-dropdown')  
-            .should('be.visible')         
-            .contains('.ant-select-item-option-content', value)
-            .click({ force: true });    
+        if (placeholderText && placeholderText.trim() !== "") {
+            input_field = DROPDOWN_FIELD(placeholderText);
+        } else {
+            input_field = `(//input[@class="ant-select-selection-search-input"])[1]`;
+        }
+
+        cy.xpath(input_field)
+            .should('exist')
+            .click({ force: true })
+            .type(`${value}{enter}`, { force: true });
     },
 
-    selectSalary(value) {
-        cy.xpath(SALARY_LOCATOR)
-            .should('be.visible')
-            .click({force:true});
+    fillFindJobSection(status,salary){
+        this.selectDropdownValue('Đang tìm việc', status);
+        this.selectDropdownValue('Dưới $300', salary);
 
-        cy.get('.ant-select-dropdown') 
-            .should('be.visible')        
-            .contains('.ant-select-item-option-content', value) 
-            .click({ force: true });    
     },
 
     fillIntroduce(content){
-        cy.xpath(INTRODUCE_LOCATOR)
+        cy.xpath(INTRODUCE)
+            .first()
             .should('be.visible')
             .click({force:true})
             .type(content, {force:true})
     },
 
-    selectSkills(skill) {
-        cy.xpath(SKILL_LOCATOR)
-            .should('exist')
-            .clear({ force: true })
-            .type(`${skill}{enter}`, { force: true });
+
+    fillProgramSkill(main_skill,group_skills){
+        this.selectDropdownValue('Nhóm kỹ năng chính',main_skill);
+        this.selectDropdownValue('Chọn kỹ năng',group_skills);
     },
 
-    
+    fillEducation(school,major){
+        this.selectDropdownValue('Vui lòng nhập tên trường', school)
+        this.fillInputFields([
+            {locator: INPUT_FIELD('Vui lòng nhập ngành học'), value: major, force: true},
+        ]); 
+    },
+
     uploadAvatar(filePath) {
         cy.get('input[type="file"]').attachFile(filePath);
     },
 
-    clickCreateButton() {
-        cy.contains('button', 'Tạo CV').click();
+    clickSaveCV() {
+        cy.xpath(BUTTON_LOCATOR('LƯU CV')).click();
     },
 
     checkSuccessMessage() {

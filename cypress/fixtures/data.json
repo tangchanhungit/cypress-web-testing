@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Nguyen Van A",
+    "position": "TESTER",
+    "gmail": "51900797@student.tdtu.edu.vn",
+    "phone": "0337704139",
+    "gender": "male",
+    "dateOfBirth": "02-04-2001",
+    "city": "Thành phố Hồ Chí Minh",
+    "main_skills" : "Web Developer",
+    "group_skills": "PHP",
+    "address": "1234 Test",
+    "linkedin": "https://www.linkedin.com/",
+    "github": "https://github.com/",
+    "status": "Đang tìm việc",
+    "salary": "Dưới $300",
+    "content": "test data",
+    "school": "Đại Học Tôn Đức Thắng",
+    "major": "Mạng máy tính và truyền thông dữ liệu"
+  }
+]
