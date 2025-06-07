@@ -1,3 +1,5 @@
+import 'cypress-iframe';
+import 'cypress-wait-until';
 Cypress.Commands.add('restoreLoginSession', () => {
   cy.fixture('auth-cookies.json').then((cookies) => {
     cookies.forEach((cookie) => {
@@ -134,3 +136,11 @@ export function handleIfResultsExist(callback) {
     }
   });
 }
+Cypress.Commands.add('getIframeBody', (selector) => {
+
+  return cy.get(selector)
+  .its('0.contentDocument.body')
+  .should('not.be.empty')
+  .then(cy.wrap);
+
+});

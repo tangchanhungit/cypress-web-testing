@@ -5,10 +5,13 @@ const BUTTON_LOCATOR = (text) => `//button[.//span[text()='${text}']]`
 const INPUT_FIELD = (placeholder) => `//input[@placeholder='${placeholder}']`
 const DROPDOWN_FIELD = (placeholder) => `//span[contains(text(),"${placeholder}")]/preceding-sibling::span//input[@class="ant-select-selection-search-input"]`
 const GENDER_LOCATION = (gender) => `//input[@value='${gender}']`
-
 export const CVPage = {
     navigate() {
         cy.visit('/tao-cv-online')
+    },
+
+    navigateManageCV() {
+        cy.visit('/users/my-cv')
     },
 
     clickCVBtnCreate(){
@@ -17,7 +20,7 @@ export const CVPage = {
     },
 
     fillNameInfo(name) {
-        cy.xpath(NAME_FIELD).clear().type(name);
+        cy.xpath(NAME_FIELD).type(name);
     },
 
     clickStartCreate(){
@@ -25,7 +28,7 @@ export const CVPage = {
     },
 
     fillInputFields(fields) {
-        fields.forEach(({ locator, value, force = false }) => {
+        fields.forEach(({ locator, value, force = true }) => {
             cy.xpath(locator)
                 .should('exist')
                 .clear({ force })
@@ -75,19 +78,26 @@ export const CVPage = {
             .type(`${value}{enter}`, { force: true });
     },
 
+    selectCalendarValue(index, date) {
+    cy.get('.ant-picker-input > input')
+        .eq(index)
+        .should('exist')
+        .clear({ force: true })
+        .type(date, { force: true })
+        .type('{enter}', { force: true });
+},
+
     fillFindJobSection(status,salary){
         this.selectDropdownValue('Đang tìm việc', status);
         this.selectDropdownValue('Dưới $300', salary);
 
     },
 
-    fillIntroduce(content){
-        cy.xpath(INTRODUCE)
-            .first()
-            .should('be.visible')
-            .click({force:true})
-            .type(content, {force:true})
-    },
+    fillIntroduce(){
+    cy.getIframeBody('.tox-edit-area__iframe').within(() => {
+        cy.get('p').type('Ayush');
+  })
+},
 
 
     fillProgramSkill(main_skill,group_skills){
@@ -100,6 +110,8 @@ export const CVPage = {
         this.fillInputFields([
             {locator: INPUT_FIELD('Vui lòng nhập ngành học'), value: major, force: true},
         ]); 
+        this.selectCalendarValue(1,'01-2020');
+        this.selectCalendarValue(2,'01-2024');
     },
 
     uploadAvatar(filePath) {
@@ -108,10 +120,17 @@ export const CVPage = {
 
     clickSaveCV() {
         cy.xpath(BUTTON_LOCATOR('LƯU CV')).click();
+        this.verifyCreateCVSuccess()
     },
 
     checkSuccessMessage() {
         cy.contains('CV của bạn đã được tạo').should('exist');
-    }
-}
+    },
+    verifyCreateCVSuccess(){
+        cy.contains('p', 'Bạn đã tạo CV thành công').should('be.visible');
+    },
+
+
+};
+
 
