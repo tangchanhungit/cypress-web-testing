@@ -66,8 +66,6 @@ Then('I should see at least {int} result', (minCount) => {
   })
 });
 
-
-
 Then('Each result should contain {string}', (keyword) => {
   handleIfResultsExist( () => {
     SearchPage.jobCards.then(($cards) => {
