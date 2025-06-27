@@ -27,9 +27,9 @@ Cypress.on('uncaught:exception', (err, runnable) => {
   return true;
 });
 
-// beforeEach(() => {
-//   cy.restoreLoginSession(); // set lại login cookie
-// });
+beforeEach(() => {
+  cy.restoreLoginSession(); // set lại login cookie
+});
 
 require('cypress-xpath')
 
